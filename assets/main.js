@@ -739,3 +739,30 @@
 
 /* === licznik otwarć demo (buy-signal) v3 — geo po stronie serwera === */
 (function(){try{if(String(location.protocol).indexOf('http')!==0)return;try{if(/[?&#]team=1/.test(location.search+location.hash)){localStorage.setItem('nb_team','1');}}catch(e){}try{if(localStorage.getItem('nb_team')==='1')return;}catch(e){}if(/crm-newbeginning|crm\.impulseo\.pl/.test(document.referrer||''))return;try{if(navigator.webdriver)return;}catch(e){}try{if(/^https?:\/\/(kris20032|impulseo-pl)\.github\.io\/?$/i.test(document.referrer||''))return;}catch(e){}if(sessionStorage.getItem('_dv'))return;sessionStorage.setItem('_dv','1');var seg=(location.pathname.split('/').filter(Boolean)[0])||'';var base=location.origin+(seg?('/'+seg):'');var ua='';try{ua=(navigator.userAgent||'').slice(0,300);}catch(e){}var EP='https://zngfubfinbojfgaxdrbf.supabase.co/functions/v1/demo-view';try{fetch(EP,{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify({demo_url:base,page:location.pathname,referrer:(document.referrer||null),user_agent:(ua||null)})}).catch(function(){});}catch(e){}}catch(e){}})();
+
+/* === UKŁAD WG WZORCA: przewijane usługi (strzałki) === */
+(function () {
+  try {
+    document.querySelectorAll('[data-lx-slider]').forEach(function (box) {
+      var track = box.querySelector('.lx-track');
+      var prev = box.querySelector('.lx-arrow[data-dir="-1"]');
+      var next = box.querySelector('.lx-arrow[data-dir="1"]');
+      if (!track || !prev || !next) return;
+      function krok() {
+        var s = track.querySelector('.lx-slide');
+        var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        return s ? s.getBoundingClientRect().width + gap : track.clientWidth;
+      }
+      function stan() {
+        var max = track.scrollWidth - track.clientWidth - 2;
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= max;
+      }
+      prev.addEventListener('click', function () { track.scrollBy({ left: -krok(), behavior: 'smooth' }); });
+      next.addEventListener('click', function () { track.scrollBy({ left: krok(), behavior: 'smooth' }); });
+      track.addEventListener('scroll', stan, { passive: true });
+      window.addEventListener('resize', stan, { passive: true });
+      stan();
+    });
+  } catch (e) {}
+})();
